@@ -1,25 +1,39 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { SitesModule } from './sites/sites.module';
 import { HealthModule } from './health/health.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    // Configuração do ConfigModule para carregar as variáveis de ambiente
     ConfigModule.forRoot({
-      isGlobal: true, // Torna as variáveis de ambiente globais em todo o aplicativo
+      isGlobal: true,
     }),
 
-    // Conexão com o MongoDB usando a URI do .env
     MongooseModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URI'),
       }),
       inject: [ConfigService],
     }),
+
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'), // Segredo do JWT configurado no .env
+        signOptions: {
+          expiresIn: '1h',
+        },
+      }),
+      inject: [ConfigService],
+    }),
+
     SitesModule,
     HealthModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
