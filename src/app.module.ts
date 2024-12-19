@@ -22,7 +22,7 @@ import { AuthModule } from './auth/auth.module';
 
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'), // Segredo do JWT configurado no .env
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
           expiresIn: '1h',
         },

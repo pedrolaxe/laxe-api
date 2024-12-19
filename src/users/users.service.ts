@@ -13,7 +13,8 @@ export class UsersService {
   async create(
     email: string,
     password: string,
-    firstName: string, // Novo parâmetro para o primeiro nome
+    firstName: string,
+    phoneNumber?: string,
     roles: Role[] = [Role.USER], // O valor default para roles
   ): Promise<any> {
     // Verifica se o e-mail já existe
@@ -31,6 +32,7 @@ export class UsersService {
       password: hashedPassword,
       firstName, // Salva o firstName
       roles, // Define as roles
+      phoneNumber,
     });
 
     // Salva o usuário e omite a senha na resposta
@@ -60,5 +62,8 @@ export class UsersService {
   private async hashPassword(password: string): Promise<string> {
     const saltRounds = 10;
     return bcrypt.hash(password, saltRounds);
+  }
+  async findById(id: string): Promise<User | null> {
+    return this.userModel.findById(id).exec();
   }
 }
