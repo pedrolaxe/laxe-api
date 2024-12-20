@@ -55,7 +55,7 @@ export class UsersService {
   async findAll(): Promise<any[]> {
     return this.userModel
       .find()
-      .select('firstName email roles createdAt') // Seleciona apenas os campos desejados
+      .select('firstName email roles phoneNumber isEmailConfirmed createdAt') // Seleciona apenas os campos desejados
       .exec();
   }
 
