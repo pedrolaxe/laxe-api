@@ -16,4 +16,8 @@ export class UpdateSettingsDto {
   @IsOptional()
   @IsString()
   logoUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  logoMobUrl?: string;
 }

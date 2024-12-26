@@ -18,6 +18,9 @@ export class Settings extends Document {
   @Prop({ required: false })
   logoUrl?: string;
 
+  @Prop({ required: false })
+  logoMobUrl?: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 }
