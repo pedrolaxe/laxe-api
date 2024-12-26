@@ -37,7 +37,7 @@ export class AuthController {
   }
 
   @Post('register')
-  @UsePipes(new ValidationPipe({ transform: true })) // Validação correta do DTO
+  @UsePipes(new ValidationPipe({ transform: true }))
   async register(@Body() registerDto: RegisterDto) {
     // Verifica se o e-mail já está em uso
     const existingUser = await this.usersService.findByEmail(registerDto.email);
@@ -45,34 +45,35 @@ export class AuthController {
       throw new ConflictException('Email já está em uso');
     }
 
-    // Cria o usuário, passando roles do DTO
     const user = await this.usersService.create(
       registerDto.email,
       registerDto.password,
       registerDto.firstName,
-      registerDto.roles, // Passando as roles definidas no DTO
+      registerDto.phoneNumber,
+      registerDto.roles,
     );
 
     return user;
   }
   // Rota para listar usuários
   @Get('users')
-  @UseGuards(JwtAuthGuard) // Adicionando o JwtAuthGuard aqui
+  @UseGuards(JwtAuthGuard)
   async getUsers() {
     const users = await this.usersService.findAll();
     return users.map((user) => ({
+      id: user.id,
       firstName: user.firstName,
       email: user.email,
+      phoneNumber: user.phoneNumber,
       roles: user.roles,
       createdAt: user.createdAt,
     }));
   }
-  @UseGuards(JwtAuthGuard) // Protege a rota com o guard
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   async getProfile(@Request() req) {
-    // Retorna os dados do usuário logado
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = req.user; // Remove a senha da resposta
+    const { password, ...userWithoutPassword } = req.user;
     return userWithoutPassword;
   }
 }

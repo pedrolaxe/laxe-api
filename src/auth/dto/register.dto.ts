@@ -5,6 +5,7 @@ import {
   Matches,
   IsOptional,
   IsEnum,
+  IsString,
 } from 'class-validator';
 import { Role } from '../../users/users.schema';
 import { Match } from './match.decorator';
@@ -31,4 +32,8 @@ export class RegisterDto {
 
   @IsNotEmpty({ message: 'O nome é obrigatório' })
   firstName: string;
+
+  @IsOptional()
+  @IsString()
+  phoneNumber?: string;
 }
